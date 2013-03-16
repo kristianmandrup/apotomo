@@ -23,6 +23,13 @@ class WidgetGeneratorTest < Rails::Generators::TestCase
         assert_file "test/widgets/gerbil_widget_test.rb", %r(widget\(:gerbil\))
       end
       
+      should "create javascript and css assets" do
+        run_generator %w(Gerbil squeak snuggle -t test_unit)
+
+        assert_file "app/assets/javascripts/widgets/gerbil_widget.coffee", /Define your coffeescript code for the Gerbil widget*/
+        assert_file "app/assets/stylesheets/widgets/gerbil_widget.css", /Define your css code for the Gerbil widget*/
+      end
+
       should "create haml assets with -e haml" do
         run_generator %w(Gerbil squeak snuggle -e haml -t test_unit)
         
