@@ -1,4 +1,5 @@
 require 'action_view/helpers/javascript_helper'
+require "active_support/core_ext" # for Hash.to_json etc.
 
 module Apotomo
   class JavascriptGenerator
@@ -47,6 +48,27 @@ module Apotomo
       def replace(id, markup);    element(id) + '.replaceWith("'+escape(markup)+'");'; end
       def update_id(id, markup);  update("##{id}", markup); end
       def replace_id(id, markup); replace("##{id}", markup); end
+
+      # call existing widget
+      # - call_fun :update, :top_bar, item: 1
+
+      # --> Widget.TopBar.update('action': 1)
+      def call_fun name, id, hash
+        function_name = jq_helper.js_camelize name
+        namespace = "Widget.#{id.to_s.camelize}"
+        "#{namespace}.#{function_name}(\"##{id}\", #{hash.to_json});"
+      end
+
+      # call existing widget
+      # - call_widget :top_bar, :flash_light, action: 'search'
+
+      # --> Widgets.topBar.flashLight('action': 'search')
+
+      def call_widget name, fun, hash
+        function_name = jq_helper.js_camelize name
+        "#{name}.#{function_name}(#{hash.to_json});"
+      end
+
     end
   end
 end

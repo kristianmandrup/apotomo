@@ -30,15 +30,22 @@ module Apotomo
       check_class_collision :suffix => "Widget"
       
       
-      def create_cell_file
-        template 'widget.rb', "#{base_path}_widget.rb"
-        template 'widget.rb', File.join(base_path, "#{file_name}_widget.rb")
+      class_option :js, :type => :boolean, :default => false, :desc => 'Generate javascript asset file'
+
+      def create_stylesheet_file
+         template 'widget.css', "#{css_path}_widget.css"
+       end            
+
+      def creates_script_file
+        return template 'widget.coffee', "#{js_path}_widget.coffee" if !javascript?
+        template 'widget.js', "#{js_path}_widget.js"
       end
 
-      def create_assets_files
-        template 'widget.coffee', "#{js_path}_widget.coffee"
-        template 'widget.css', "#{css_path}_widget.css"
-      end            
+      protected
+
+      def javascript?
+        options[:js]
+      end
     end
   end
 end

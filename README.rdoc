@@ -42,17 +42,36 @@ Let's wrap that comments block in a widget.
 
 == Generate
 
-Go and generate a widget stub.
+  $ rails g apotomo:widget comments show -e haml
+    invoke  haml
+    create  app/widgets/comments/views/show.html.haml
+    invoke  rspec
+    create  spec/widgets/comments/comments_widget_spec.rb
+    create  app/widgets/comments/comments_widget.rb
+    create  app/assets/stylesheets/widgets/comments_widget.css
+    create  app/assets/javascripts/widgets/comments_widget.coffee
 
-  $ rails generate apotomo:widget Comments display write -e haml
-    create  app/cells/
-    create  app/cells/comments_widget
-    create  app/cells/comments_widget.rb
-    create  app/cells/comments_widget/display.html.haml
-    create  app/cells/comments_widget/write.html.haml
-    create  test/widgets/comments_widget_test.rb
+Go and generate a widget TopBar stub.
 
-Nothing special.
+  $ rails g apotomo:widget TopBar show -e haml
+    invoke  haml
+    create  app/widgets/top_bar/views/show.html.haml
+    invoke  rspec
+    create  spec/widgets/top_bar/top_bar_widget_spec.rb
+    create  app/widgets/top_bar/top_bar_widget.rb
+    create  app/assets/stylesheets/widgets/top_bar_widget.css
+    create  app/assets/javascripts/widgets/top_bar_widget.coffee
+
+And a Form widget within the TopBar namespace
+
+  $ rails g apotomo:widget TopBar::Form show -e haml
+    invoke  haml
+    create  app/widgets/top_bar/form/views/show.html.haml
+    invoke  rspec
+    create  spec/widgets/top_bar/form/form_widget_spec.rb
+    create  app/widgets/top_bar/form/form_widget.rb
+    create  app/assets/javascripts/widgets/top_bar/form_widget.coffee
+    create  app/assets/stylesheets/widgets/top_bar/form_widget.css
 
 == Plug it in
 
@@ -159,6 +178,115 @@ If that's not what you want, do
   end
 
 Apotomo doesn't depend on _any_ JS framework - you choose!
+
+== Non-intrusive JavaScript
+
+A non-intrusive approach could involve the use of the `call_fun` method which takes the `name` of the javascript method to call, the widget `id` and a hash of data.
+
+Example: 
+
+`call_fun :toggle_active, 'TopBar', {item: 'item:first'}`
+
+This will result in the call:
+
+```javascript
+Widget.TopBar.toggleActive({'item': 'item:first'});
+```
+
+This ensures that all our javascript for a widget is namespace contained nicely.
+
+In your `application.js` manifest file
+
+```
+//= require apotomo/Namespace
+```
+
+In the `top_bar.coffee` file the following is generated for our convenience
+
+```javascript
+Widget.TopBar = Namespace('Apotomo.Widget.TopBar');
+
+Widget.TopBar = {}
+```
+
+We can then implement clean non-intrusive, namespaced javascript functionality as follows:
+
+```javascript
+Widget.TopBar = Namespace('Apotomo.Widget.TopBar');
+
+Widget.TopBar = {
+  update: function(item) {
+    'updated:' + item }
+  },
+  
+  toggleActive: function(widget_id, options) {
+    item = options['item'];
+    // do some toggle magic!!!
+    $(widget_id).find(item).toggleClass('active');
+  }
+}
+```
+
+Note that you can use fx jQuery [extend](http://api.jquery.com/jQuery.extend/) to extend javascript widget functionality similar to modules (prototypical inheritance). 
+There are many other powerful javascript libraries out there (fx Base2, Prototype.js, JS.Class) that can be used to great effect for OOP javascript with inheritance etc. 
+
+```coffeescript
+$.extend Widget.Admin.TopBar, Widget.TopBar
+```
+
+Here we extended the `Admin.TopBar` with base functionality from `TopBar` :)
+
+== Using Coffeescript
+
+Coffeescript has built in [class structure](http://coffeescript.org/#classes).
+and [namespaces](http://spin.atomicobject.com/2011/04/01/namespace-a-coffeescript-nugget/). Also see [namespaced classes](http://stackoverflow.com/questions/8730859/classes-within-coffeescript-namespace)
+
+```coffeescript
+namespace "Widget.TopBar", (exports) ->
+  # add functions or classes here
+  bar: (foo) ->
+```
+
+```coffeescript
+class MyFirstWidget
+  constructor: (options = {}) ->
+    @options = options
+    @name = options.name
+  myFunc: () ->
+    console.log 'works'
+
+namespace "Widget.TopBar", (exports) ->
+  exports.MyFirstWidget = MyFirstWidget
+
+  toggleActive: (widget_id, options) ->
+    item = options.item
+    $(widget_id).find(item).toggleClass 'active'
+```
+
+```coffeescript
+firstWidget = new Widget.TopBar.MyFirstWidget
+firstWidget.myFunc
+```
+
+=== javascript Widget instance
+
+For an Ajax enabled page, you can create javascript widget instances in the `Widgets` namespace.
+
+```coffeescript
+Widgets.firstWidget = new Widget.TopBar.MyFirstWidget name: "cool widget"
+``
+
+Then you can update an existing widget instance from your Widget (controller) using `call_widget` as follows:
+
+```ruby
+call_widget :firstWidget, :flash_light, action: 'search'
+```
+
+Which will result in the statement:
+
+```javascript
+Widgets.firstWidget.flashLight('action': 'search');
+```
 
 == Testing
 
