@@ -185,79 +185,66 @@ A non-intrusive approach could involve the use of:
 
 * widget_class_call(id, function, hash)
 * widget_call(id, function, hash)
- 
+
 Example: 
  
-`widget_class_call 'TopBar', :toggle_active, {item: 'item:first'}`
- 
+  widget_class_call 'TopBar', :toggle_active, {item: 'item:first'}
+
 Will call a function on the widget class (or module):
  
-```javascript
-Widget.TopBar.toggleActive({'item': 'item:first'});
-```
+  Widget.TopBar.toggleActive({'item': 'item:first'});
  
-`widget_call 'Admin::TopBar', :toggle_active, {item: 'item:first'}`
+  widget_call 'Admin::TopBar', :toggle_active, {item: 'item:first'}
 
 Will call a function on a particular instance of that widget!
 
-```javascript
-Widgets.admin.topBar.toggleActive({'item': 'item:first'});
-```
+  Widgets.admin.topBar.toggleActive({'item': 'item:first'});
 
 This ensures that all our javascript for a widget is nicely namespace contained.
  
-In your `application.js` manifest file
+In your +application.js+ manifest file
  
-```
-//= require apotomo/namespaces
-```
+  //= require apotomo/namespaces
  
-An alternative `apotomo/Namespace.js` is also available, which you might want to experiment with also.
+An alternative +apotomo/Namespace.js+ is also available, which you might want to experiment with also.
 
-In the `top_bar.coffee` file the following is generated for our convenience
+In the +top_bar.coffee+ file the following is generated for our convenience
  
-```javascript
-Widget.TopBar = namespace('Widget.TopBar');
+  Widget.TopBar = namespace('Widget.TopBar');
  
-Widget.TopBar = {
-  // add widget functions here
-  foo: function(bar) {},
-  
-  bar: function(foor) {}  
-}
-```
- 
- We can then implement clean non-intrusive, namespaced javascript functionality as follows:
- 
-```javascript
-Widget.TopBar = namespace('Widget.TopBar');
- 
- Widget.TopBar = {
-   update: function(item) {
-    'updated:' + item }
-  },
-  
-  toggleActive: function(widget_id, options) {
-    item = options['item'];
-    // do some toggle magic!!!
-    $(widget_id).find(item).toggleClass('active');
+  Widget.TopBar = {
+    // add widget functions here
+    foo: function(bar) {},
+    
+    bar: function(foor) {}  
   }
-}
-```
+ 
+We can then implement clean non-intrusive, namespaced javascript functionality as follows:
+ 
+  Widget.TopBar = namespace('Widget.TopBar');
+ 
+  Widget.TopBar = {
+    update: function(item) {
+      'updated:' + item }
+    },
+  
+    toggleActive: function(widget_id, options) {
+      item = options['item'];
+      // do some toggle magic!!!
+      $(widget_id).find(item).toggleClass('active');
+    }
+  }
 
 Note that you can use fx jQuery [extend](http://api.jquery.com/jQuery.extend/) to extend javascript widget functionality similar to modules (prototypical inheritance). 
 There are many other powerful javascript libraries out there (fx Base2, Prototype.js, JS.Class) that can be used to great effect for OOP javascript with inheritance etc. 
  
-```javascript
-$.extend(Widget.admin.TopBar, Widget.TopBar);
-```
+  $.extend(Widget.admin.TopBar, Widget.TopBar);
  
-Here we extended the `Admin.TopBar` with base functionality from `TopBar` :)
-Here we extended the `admin.TopBar` with base functionality from `TopBar` :)
+Here we extended the +admin.TopBar+ with base functionality from +TopBar+ :)
 
 Also see the Coffeescript section below to see how to use namespaces.
  
- == Using Coffeescript
+== Using Coffeescript
  
 Coffeescript has built in [class structure](http://coffeescript.org/#classes) and [namespaces](http://spin.atomicobject.com/2011/04/01/namespace-a-coffeescript-nugget/). 
 
@@ -269,42 +256,35 @@ Please also see:
 
 Here an appetizer :) replace animals with widgets and you get the idea...
 
-```coffeescript
-namespace "samples.coffeescript.oop.abstract"
+  namespace "samples.coffeescript.oop.abstract"
     Animal :
         class Animal
             constructor : (@species, @isMammal=false) ->
                 return this
  
-# NOTE: Animal must be defined BEFORE Dog 
-#
-namespace "samples.coffeescript.oop.pets"
+  # NOTE: Animal must be defined BEFORE Dog 
+  #
+  namespace "samples.coffeescript.oop.pets"
     Dog :
-        class Dog extends samples.coffeescript.oop.abstract.Animal
-            constructor : (@name) ->
-```            
+      class Dog extends samples.coffeescript.oop.abstract.Animal
+        constructor : (@name) ->
 
-You should first require `namespaces`:
+You should first require +namespaces+:
 
-```
-//= require apotomo/namespaces.min
-```
+  //= require apotomo/namespaces.min
 
 When you generate a widget, the coffescript file for it should look like this:
 
-`rails g apotomo:widget TopBar show -e haml`
+  rails g apotomo:widget TopBar show -e haml
  
-```coffeescript
-namespace "Widget"
+  namespace "Widget"
   TopBar :
     class TopBar
       constructor : (@widget_id = widget_id) ->
 
       toggleActive: (options) ->
-```
  
-```coffeescript
-namespace "Widget"
+  namespace "Widget"
   TopBar :
     class TopBar
       constructor : (@widget_id = widget_id) ->
@@ -312,12 +292,10 @@ namespace "Widget"
       toggleActive: (options) ->
         item = options.item
         $(@widget_id).find(item).toggleClass 'active'
-```
  
-`rails g apotomo:widget TopBar::SuperThang show -e haml`
+  rails g apotomo:widget TopBar::SuperThang show -e haml
 
-```coffeescript
-namespace "Widget.topBar"
+  namespace "Widget.topBar"
   SuperThang :
     class SuperThang extends Widget.TopBar
         constructor : (@widget_id = widget_id) ->
@@ -329,27 +307,20 @@ namespace "Widget.topBar"
     #
     BottomBar = Widget.BottomBar
     Footer = Widget.Footer
-```
  
 === Browser Widget instances
  
-For an Ajax enabled page, you can create javascript widget instances in the `Widgets` namespace.
+For an Ajax enabled page, you can create javascript widget instances in the +Widgets+ namespace.
  
-```coffeescript
-Widgets.thang = new Widget.topBar.SuperThang
-```
+  Widgets.thang = new Widget.topBar.SuperThang
  
- Then you can update an existing widget instance from your Widget (controller) using `call_widget` as follows:
+Then you can update an existing widget instance from your Widget (controller) using +call_widget+ as follows:
  
-```ruby
-call_widget :thang, :toggleActive, item: ".item:first"
-```
+  call_widget :thang, :toggleActive, item: ".item:first"
  
 Which will result in the statement:
  
-```javascript
-Widgets.thang.toggleActive('action': ".item:first");
-```
+  Widgets.thang.toggleActive('action': ".item:first");
  
 == Testing
 
