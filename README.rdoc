@@ -44,19 +44,19 @@ Let's wrap that comments block in a widget.
 
 Go and generate a widget stub.
 
-  $ rails generate apotomo:widget Comments display -e haml
+  $ rails generate apotomo:widget Comments display write -e haml
     create  app/widgets/comments_widget.rb
     create  app/widgets/comments/display.html.haml
+    create  app/widgets/comments/write.html.haml
     create  app/assets/stylesheets/widgets/comments_widget.css
     create  app/assets/javascripts/widgets/comments_widget.coffee
     create  test/widgets/comments_widget_test.rb
 
 Nothing special. Go and generate a widget TopBar stub.
 
-  $ rails generate apotomo:widget TopBar display hide -e haml
+  $ rails generate apotomo:widget TopBar display -e haml
     create  app/widgets/top_bar_widget.rb
     create  app/widgets/top_bar/display.html.haml
-    create  app/widgets/top_bar/hide.html.haml
     create  app/assets/stylesheets/widgets/top_bar_widget.css
     create  app/assets/javascripts/widgets/top_bar_widget.coffee
     create  test/widgets/top_bar_widget_test.rb
