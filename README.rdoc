@@ -45,35 +45,29 @@ Let's wrap that comments block in a widget.
 Go and generate a widget stub.
 
   $ rails g apotomo:widget comments show -e haml
-    invoke  haml
-    create  app/widgets/comments/views/show.html.haml
-    invoke  rspec
-    create  spec/widgets/comments/comments_widget_spec.rb
-    create  app/widgets/comments/comments_widget.rb
+    create  app/widgets/comments_widget.rb
+    create  app/widgets/comments/show.html.haml
     create  app/assets/stylesheets/widgets/comments_widget.css
     create  app/assets/javascripts/widgets/comments_widget.coffee
+    create  test/widgets/comments_widget_test.rb
 
-Go and generate a widget TopBar stub.
+Nothing special. Go and generate a widget TopBar stub.
 
   $ rails g apotomo:widget TopBar show -e haml
-    invoke  haml
-    create  app/widgets/top_bar/views/show.html.haml
-    invoke  rspec
-    create  spec/widgets/top_bar/top_bar_widget_spec.rb
-    create  app/widgets/top_bar/top_bar_widget.rb
+    create  app/widgets/top_bar_widget.rb
+    create  app/widgets/top_bar/show.html.haml
     create  app/assets/stylesheets/widgets/top_bar_widget.css
     create  app/assets/javascripts/widgets/top_bar_widget.coffee
+    create  test/widgets/top_bar_widget_test.rb
 
-And a Form widget within the TopBar namespace
+And a Form widget within the TopBar namespace.
 
   $ rails g apotomo:widget TopBar::Form show -e haml
-    invoke  haml
-    create  app/widgets/top_bar/form/views/show.html.haml
-    invoke  rspec
-    create  spec/widgets/top_bar/form/form_widget_spec.rb
     create  app/widgets/top_bar/form/form_widget.rb
+    create  app/widgets/top_bar/form/show.html.haml
     create  app/assets/javascripts/widgets/top_bar/form_widget.coffee
     create  app/assets/stylesheets/widgets/top_bar/form_widget.css
+    create  test/widgets/top_bar/form/form_widget_test.rb
 
 == Plug it in
 
