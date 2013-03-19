@@ -42,6 +42,8 @@ Let's wrap that comments block in a widget.
 
 == Generate
 
+Go and generate a widget stub.
+
   $ rails g apotomo:widget comments show -e haml
     invoke  haml
     create  app/widgets/comments/views/show.html.haml
@@ -188,13 +190,13 @@ A non-intrusive approach could involve the use of:
 
 Example: 
  
-  widget_class_call 'TopBar', :toggle_active, {item: 'item:first'}
+  widget_class_call 'TopBar', :toggle_active, :item => 'item:first'
 
 Will call a function on the widget class (or module):
  
   Widget.TopBar.toggleActive({'item': 'item:first'});
  
-  widget_call 'Admin::TopBar', :toggle_active, {item: 'item:first'}
+  widget_call 'Admin::TopBar', :toggle_active, :item => 'item:first'
 
 Will call a function on a particular instance of that widget!
 
@@ -316,7 +318,7 @@ For an Ajax enabled page, you can create javascript widget instances in the +Wid
  
 Then you can update an existing widget instance from your Widget (controller) using +call_widget+ as follows:
  
-  call_widget :thang, :toggleActive, item: ".item:first"
+  call_widget :thang, :toggleActive, :item => ".item:first"
  
 Which will result in the statement:
  
