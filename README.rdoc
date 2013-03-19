@@ -44,27 +44,28 @@ Let's wrap that comments block in a widget.
 
 Go and generate a widget stub.
 
-  $ rails g apotomo:widget comments show -e haml
+  $ rails generate apotomo:widget Comments display -e haml
     create  app/widgets/comments_widget.rb
-    create  app/widgets/comments/show.html.haml
+    create  app/widgets/comments/display.html.haml
     create  app/assets/stylesheets/widgets/comments_widget.css
     create  app/assets/javascripts/widgets/comments_widget.coffee
     create  test/widgets/comments_widget_test.rb
 
 Nothing special. Go and generate a widget TopBar stub.
 
-  $ rails g apotomo:widget TopBar show -e haml
+  $ rails generate apotomo:widget TopBar display hide -e haml
     create  app/widgets/top_bar_widget.rb
-    create  app/widgets/top_bar/show.html.haml
+    create  app/widgets/top_bar/display.html.haml
+    create  app/widgets/top_bar/hide.html.haml
     create  app/assets/stylesheets/widgets/top_bar_widget.css
     create  app/assets/javascripts/widgets/top_bar_widget.coffee
     create  test/widgets/top_bar_widget_test.rb
 
 And a Form widget within the TopBar namespace.
 
-  $ rails g apotomo:widget TopBar::Form show -e haml
+  $ rails generate apotomo:widget TopBar::Form display -e haml
     create  app/widgets/top_bar/form/form_widget.rb
-    create  app/widgets/top_bar/form/show.html.haml
+    create  app/widgets/top_bar/form/display.html.haml
     create  app/assets/javascripts/widgets/top_bar/form_widget.coffee
     create  app/assets/stylesheets/widgets/top_bar/form_widget.css
     create  test/widgets/top_bar/form/form_widget_test.rb
@@ -84,7 +85,7 @@ This creates a widget instance called <tt>comments_widget</tt> from the class Co
 
 == Render the widget
 
-Rendering usually happens in your controller view, <tt>views/posts/show.html.haml</tt>, for instance.
+Rendering usually happens in your controller view, <tt>views/posts/display.html.haml</tt>, for instance.
 
   %h1 @post.title
   
@@ -271,7 +272,7 @@ You should first require +namespaces+:
 
 When you generate a widget, the coffescript file for it should look like this:
 
-  rails g apotomo:widget TopBar show -e haml
+  rails generate apotomo:widget TopBar display -e haml
  
   namespace "Widget"
   TopBar :
@@ -289,7 +290,7 @@ When you generate a widget, the coffescript file for it should look like this:
         item = options.item
         $(@widget_id).find(item).toggleClass 'active'
  
-  rails g apotomo:widget TopBar::SuperThang show -e haml
+  rails g apotomo:widget TopBar::SuperThang display -e haml
 
   namespace "Widget.topBar"
   SuperThang :
