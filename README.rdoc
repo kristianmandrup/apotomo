@@ -49,7 +49,7 @@ Go and generate a widget stub.
     create  app/widgets/comments/display.html.haml
     create  app/widgets/comments/write.html.haml
     create  app/assets/stylesheets/widgets/comments_widget.css
-    create  app/assets/javascripts/widgets/comments_widget.coffee
+    create  app/assets/javascripts/widgets/comments_widget.js.coffee
     create  test/widgets/comments_widget_test.rb
 
 Nothing special. Go and generate a widget TopBar stub.
@@ -58,7 +58,7 @@ Nothing special. Go and generate a widget TopBar stub.
     create  app/widgets/top_bar_widget.rb
     create  app/widgets/top_bar/display.html.haml
     create  app/assets/stylesheets/widgets/top_bar_widget.css
-    create  app/assets/javascripts/widgets/top_bar_widget.coffee
+    create  app/assets/javascripts/widgets/top_bar_widget.js.coffee
     create  test/widgets/top_bar_widget_test.rb
 
 And a Form widget within the TopBar namespace.
@@ -66,7 +66,7 @@ And a Form widget within the TopBar namespace.
   $ rails generate apotomo:widget TopBar::Form display -e haml
     create  app/widgets/top_bar/form/form_widget.rb
     create  app/widgets/top_bar/form/display.html.haml
-    create  app/assets/javascripts/widgets/top_bar/form_widget.coffee
+    create  app/assets/javascripts/widgets/top_bar/form_widget.js.coffee
     create  app/assets/stylesheets/widgets/top_bar/form_widget.css
     create  test/widgets/top_bar/form/form_widget_test.rb
 
@@ -197,7 +197,7 @@ Will call a function on a particular instance of that widget!
 
   Widgets.admin.topBar.toggleActive({'item': 'item:first'});
 
-This ensures that all our javascript for a widget is nicely namespace contained (based on [namespace.coffee](https://github.com/CodeCatalyst/namespace.coffee)).
+This ensures that all our javascript for a widget is nicely namespace contained (based on [namespace.js.coffee](https://github.com/CodeCatalyst/namespace.js.coffee)).
 We can then implement clean non-intrusive, namespaced javascript functionality as follows.
 
 In your +application.js+ manifest file
@@ -208,7 +208,7 @@ When you generate a widget, the coffescript file for it should look like this:
 
   rails generate apotomo:widget TopBar display -e haml
  
-In the +app/assets/javascripts/widgets/top_bar.coffee+ file the following is generated for our convenience.
+In the +app/assets/javascripts/widgets/top_bar.js.coffee+ file the following is generated for our convenience.
 When you generate a widget, the coffescript file for it should look like this:
 
   namespace 'Widget'
@@ -229,7 +229,7 @@ Let's use nested namespaces!
 
   rails g apotomo:widget TopBar::SuperThang display -e haml
 
-Then write to your +app/assets/javascripts/widgets/top_bar/super_thang_widget.coffee+:
+Then write to your +app/assets/javascripts/widgets/top_bar/super_thang_widget.js.coffee+:
 
   namespace 'Widget.topBar'
     SuperThang:
