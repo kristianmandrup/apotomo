@@ -29,7 +29,7 @@ module Apotomo
       
       check_class_collision :suffix => "Widget"
  
-      class_option :js,     :type => :boolean, :default => false,  :desc => 'Generate javascript asset file'
+      class_option :js,     :type => :boolean, :default => 'js',   :desc => 'Javascript language to use: js or coffee'
       class_option :style,  :type => :string,  :default => 'scss', :desc => 'Style language to use: css, scss or sass'
  
       def create_cell_file
@@ -37,22 +37,13 @@ module Apotomo
       end
  
       def create_stylesheet_file
-        if scss?
-          template 'widget.scss', "#{css_path}_widget.css.scss"
-        elsif sass?
-          template 'widget.sass', "#{css_path}_widget.css.sass"
-        else
-          template 'widget.css', "#{css_path}_widget.css"
-        end
+        style_extension = style == 'css' ? 'css' : "css.#{style}"
+        template "widget.#{style}", "#{css_path}_widget.#{style_extension}"
       end            
  
       def create_script_file
-        if coffee?
-          template 'widget.coffee', "#{js_path}_widget.js.coffee" 
-        else
-          puts "js: #{js_path}_widget.js" 
-          template 'widget.js', "#{js_path}_widget.js"
-        end
+        js_extension = js == 'js' ? 'js' : "js.#{js}"
+        template "widget.#{js}", "#{js_path}_widget.#{js_extension}"
       end
 
       protected
@@ -68,7 +59,7 @@ module Apotomo
         class_name.to_s.demodulize
       end
 
-      def js_camelize str
+      def js_camelize(str)
         str = str.to_s
         str.camelize.sub(/^\w/, str[0].downcase)
       end
@@ -77,24 +68,8 @@ module Apotomo
         options[:style].to_s.downcase
       end
 
-      def sass?
-        style == 'sass'
-      end
-
-      def scss?
-        style == 'scss'
-      end
-
-      def css?
-        style == 'css'
-      end
-
-      def coffee?
-        !javascript?
-      end
-
-      def javascript?
-        options[:js]
+      def js
+        options[:js].to_s.downcase
       end
     end
   end
