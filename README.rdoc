@@ -197,114 +197,53 @@ Will call a function on a particular instance of that widget!
 
   Widgets.admin.topBar.toggleActive({'item': 'item:first'});
 
-This ensures that all our javascript for a widget is nicely namespace contained.
- 
+This ensures that all our javascript for a widget is nicely namespace contained (based on [namespace.coffee](https://github.com/CodeCatalyst/namespace.coffee)).
+We can then implement clean non-intrusive, namespaced javascript functionality as follows.
+
 In your +application.js+ manifest file
- 
-  //= require apotomo/namespaces
- 
-An alternative +apotomo/Namespace.js+ is also available, which you might want to experiment with also.
 
-In the +top_bar.coffee+ file the following is generated for our convenience
- 
-  Widget.TopBar = namespace('Widget.TopBar');
- 
-  Widget.TopBar = {
-    // add widget functions here
-    foo: function(bar) {},
-    
-    bar: function(foor) {}  
-  }
- 
-We can then implement clean non-intrusive, namespaced javascript functionality as follows:
- 
-  Widget.TopBar = namespace('Widget.TopBar');
- 
-  Widget.TopBar = {
-    update: function(item) {
-      'updated:' + item }
-    },
-  
-    toggleActive: function(widget_id, options) {
-      item = options['item'];
-      // do some toggle magic!!!
-      $(widget_id).find(item).toggleClass('active');
-    }
-  }
-
-Note that you can use fx jQuery [extend](http://api.jquery.com/jQuery.extend/) to extend javascript widget functionality similar to modules (prototypical inheritance). 
-There are many other powerful javascript libraries out there (fx Base2, Prototype.js, JS.Class) that can be used to great effect for OOP javascript with inheritance etc. 
- 
-  $.extend(Widget.admin.TopBar, Widget.TopBar);
- 
-Here we extended the +admin.TopBar+ with base functionality from +TopBar+ :)
-
-Also see the Coffeescript section below to see how to use namespaces.
- 
-== Using Coffeescript
- 
-Coffeescript has built in [class structure](http://coffeescript.org/#classes) and [namespaces](http://spin.atomicobject.com/2011/04/01/namespace-a-coffeescript-nugget/). 
-
-Please also see:
-
-* [namespaced classes](http://stackoverflow.com/questions/8730859/classes-within-coffeescript-namespace)
-* [namespace.coffee](https://github.com/CodeCatalyst/namespace.coffee) 
-* [oop coffee](http://www.gridlinked.info/oop-with-coffeescript-javascript/)
-
-Here an appetizer :) replace animals with widgets and you get the idea...
-
-  namespace "samples.coffeescript.oop.abstract"
-    Animal :
-        class Animal
-            constructor : (@species, @isMammal=false) ->
-                return this
- 
-  # NOTE: Animal must be defined BEFORE Dog 
-  #
-  namespace "samples.coffeescript.oop.pets"
-    Dog :
-      class Dog extends samples.coffeescript.oop.abstract.Animal
-        constructor : (@name) ->
-
-You should first require +namespaces+:
-
-  //= require apotomo/namespaces.min
+  //= require apotomo/namespace
 
 When you generate a widget, the coffescript file for it should look like this:
 
   rails generate apotomo:widget TopBar display -e haml
  
-  namespace "Widget"
-  TopBar :
-    class TopBar
-      constructor : (@widget_id = widget_id) ->
+In the +app/assets/javascripts/widgets/top_bar.coffee+ file the following is generated for our convenience.
+When you generate a widget, the coffescript file for it should look like this:
 
-      toggleActive: (options) ->
+  namespace 'Widget'
+    TopBar:
+      class TopBar
+        constructor: (@widget_id = widget_id) ->
+        toggleActive: (options) ->
  
-  namespace "Widget"
-  TopBar :
-    class TopBar
-      constructor : (@widget_id = widget_id) ->
+  namespace 'Widget'
+    TopBar:
+      class TopBar
+        constructor: (@widget_id = widget_id) ->
+        toggleActive: (options) ->
+          item = options.item
+          $(@widget_id).find(item).toggleClass 'active'
 
-      toggleActive: (options) ->
-        item = options.item
-        $(@widget_id).find(item).toggleClass 'active'
- 
+Let's use nested namespaces!
+
   rails g apotomo:widget TopBar::SuperThang display -e haml
 
-  namespace "Widget.topBar"
-  SuperThang :
-    class SuperThang extends Widget.TopBar
-        constructor : (@widget_id = widget_id) ->
+Then write to your +app/assets/javascripts/widgets/top_bar/super_thang_widget.coffee+:
 
-        createBottomBar : (widget_id) -> new BottomBar(widget_id)
-        createFooter : (widget_id) -> new Footer(widget_id)
+  namespace 'Widget.topBar'
+    SuperThang:
+      class SuperThang extends Widget.TopBar
+        constructor: (@widget_id = widget_id) ->
+        createBottomBar: (widget_id) -> new BottomBar(widget_id)
+        createFooter: (widget_id) -> new Footer(widget_id)
 
-    # private variable declarations (aliases)
-    #
-    BottomBar = Widget.BottomBar
-    Footer = Widget.Footer
- 
+Note that you can use jQuery [extend](http://api.jquery.com/jQuery.extend/) to extend javascript widget functionality similar to modules (prototypical inheritance). 
+
+  $.extend(Widget.admin.TopBar, Widget.TopBar);
+
+Here we extended the +admin.TopBar+ with base functionality from +TopBar+.
+
 === Browser Widget instances
  
 For an Ajax enabled page, you can create javascript widget instances in the +Widgets+ namespace.
