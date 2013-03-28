@@ -29,11 +29,11 @@ module Apotomo
       
       check_class_collision :suffix => "Widget"
  
-      class_option :js,     :type => :boolean, :default => 'js',   :desc => 'Javascript language to use: js or coffee'
-      class_option :style,  :type => :string,  :default => 'scss', :desc => 'Style language to use: css, scss or sass'
+      class_option :js,     :type => :string, :default => 'js',  :desc => 'Javascript language to use: js or coffee'
+      class_option :style,  :type => :string, :default => 'css', :desc => 'Style language to use: css, scss or sass'
  
       def create_cell_file
-        template 'widget.rb', File.join(base_path, "#{file_name}_widget.rb")
+        template 'widget.rb', "#{base_path}_widget.rb"
       end
  
       def create_stylesheet_file
