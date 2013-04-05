@@ -34,7 +34,23 @@ module Apotomo
     def update(*args)
       wrap_in_javascript_for(:update, *args)
     end
+
+    # TODO make better
     
+      # call existing widget
+      # - widget_class_call :top_bar, :update, item: 1
+      # --> Widget.TopBar.update('item': 1)
+      def widget_class_call(*args)
+        Apotomo.js_generator.widget_class_call(*args)
+      end
+ 
+      # call existing widget
+      # - widget_call :top_bar, :flash_light, action: 'search' 
+      # --> Widgets.topBar.flashLight('action': 'search')
+      def widget_call(*args)
+        Apotomo.js_generator.widget_call(*args)
+      end
+
   private
     def wrap_in_javascript_for(mode, *args)
       selector  = args.first.is_a?(String) ? args.shift : false
