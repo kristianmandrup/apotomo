@@ -30,5 +30,6 @@
 
 }).call(this);
 
-namespace("Widget"); 
-namespace("Widgets");
+// TODO separate a different file
+namespace("Widget");
+window.widgets = {};

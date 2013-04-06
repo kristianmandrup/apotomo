@@ -19,5 +19,6 @@ namespace = ( name, values ) ->
 # *Export the namespace function to global scope, using itself.*
 namespace( '', namespace: namespace )
 
+# TODO separate a different file
 namespace "Widget"
-namespace "Widgets"
+window.widgets = {}
