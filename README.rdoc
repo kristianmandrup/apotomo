@@ -178,6 +178,8 @@ Apotomo doesn't depend on _any_ JS framework - you choose!
 
 == Non-intrusive JavaScript
 
+Note: this section is outdated!
+
 A non-intrusive approach could involve the use of:
 
 * widget_class_call(id, function, hash)
