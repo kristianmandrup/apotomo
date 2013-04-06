@@ -62,7 +62,7 @@ module Apotomo
       # - widget_call :top_bar, :flash_light, action: 'search' 
       # --> widgets['top_bar'].flashLight('action': 'search')
       def widget_call(id, function, hash={})
-        function_name = jq_helper.js_camelize(function)
+        function_name = js_camelize(function)
         "widgets['#{id}'].#{function_name}(#{hash.to_json});"
       end
 
