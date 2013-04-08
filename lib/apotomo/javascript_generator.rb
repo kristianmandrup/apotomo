@@ -51,11 +51,11 @@ module Apotomo
 
       # call existing widget
       # - widget_class_call :top_bar, :update, item: 1
-      # --> Widget.TopBar.update('item': 1)
+      # --> TopBarWidget.update('item': 1)
       def widget_class_call(class_name, function, hash={})
-        widget_class_name = js_namespace_name(class_name)
+        widget_class_name = "#{js_namespace_name(class_name)}Widget"
         function_name = js_camelize(function)
-        "Widget.#{widget_class_name}.#{function_name}(#{hash.to_json});"
+        "#{widget_class_name}.#{function_name}(#{hash.to_json});"
       end
  
       # call existing widget
